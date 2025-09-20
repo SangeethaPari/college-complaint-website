@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Complaint Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: relative;
+        }
+        
+        .site-title {
+            font-size: 42px;
+            color: white;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .site-subtitle {
+            font-size: 20px;
+            color: rgba(255,255,255,0.9);
+            font-style: italic;
+        }
+        
+        nav {
+            background: rgba(44, 62, 80, 0.95);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin: 0 15px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links a i {
+            margin-right: 8px;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        section {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        section.active {
+            display: block;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 32px;
+        }
+        
+        h2 {
+            color: #3498db;
+            margin: 25px 0 15px;
+            font-size: 24px;
+        }
+        
+        p {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #555;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 5px solid #3498db;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .info-box h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        .info-box ul, .info-box ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .info-box li {
+            margin-bottom: 12px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            color: #495057;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            border-color: #3498db;
+            outline: none;
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+        }
+        
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .notification {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 12px;
+            display: none;
+            font-size: 16px;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        
+        .footer-message {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .feature-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            font-size: 40px;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        
+        .feature-title {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .chat-assistant {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .chat-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+            font-size: 24px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chat-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 450px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .chat-window.active {
+            display: flex;
+        }
+        
+        .chat-header {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+        }
+        
+        .message.bot {
+            background: #f1f1f1;
+            color: #333;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .message.user {
+            background: #3498db;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 10px 15px;
+            margin-right: 10px;
+        }
+        
+        .chat-input button {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #3498db;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 30px 15px;
+            }
+            
+            .site-title {
+                font-size: 32px;
+            }
+            
+            .site-subtitle {
+                font-size: 18px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-links li {
+                margin: 5px 10px;
+            }
+            
+            .nav-links a {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+            
+            section {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 26px;
+            }
+            
+            .feature-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .chat-window {
+                width: 90%;
+                right: 5%;
+                left: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="site-title">Student Complaint Portal</h1>
+        <p class="site-subtitle">Your Voice Matters - We're Here to Listen</p>
+    </div>
+    
+    <nav>
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link active" data-section="home"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#" class="nav-link" data-section="login"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                <li><a href="#" class="nav-link" data-section="contact"><i class="fas fa-envelope"></i> Contact</a></li>
+                <li><a href="#" class="nav-link" data-section="complain"><i class="fas fa-comment-alt"></i> File Complaint</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <!-- Home Section -->
+        <section id="home" class="active">
+            <h1>Welcome to Your Student Complaint Portal</h1>
+            <p>Hey there!  We're so glad you stopped by. This is your space to share anything that's on your mind about campus life. Whether it's a broken chair in the library, Wi-Fi issues, or something that's just bothering you - we're all ears! Your feedback helps us make our campus a better place for everyone.</p>
+            
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3 class="feature-title">Facility Issues</h3>
+                    <p>Leaky faucet? Broken projector? Let us know and we'll get it fixed!</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <h3 class="feature-title">Technical Support</h3>
+                    <p>Wi-Fi acting up? Computer problems? We've got your back!</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="feature-title">Academic Concerns</h3>
+                    <p>Questions about classes or exams? We're here to help!</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Safety & Hygiene</h3>
+                    <p>Safety first! Report any concerns so we can address them ASAP.</p>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h2>How It Works:</h2>
+                <ol>
+                    <li>Log in with your student ID (it's quick and easy!)</li>
+                    <li>Tell us what's on your mind - the more details, the better!</li>
+                    <li>We'll listen carefully and work on making things right</li>
+                </ol>
+            </div>
+            
+            <div class="info-box">
+                <h2>Why Your Voice Matters</h2>
+                <p>Every concern you share helps us create a better campus experience. When you speak up, you're not just helping yourself - you're helping make our community stronger for everyone. We take every submission seriously and work hard to address issues promptly.</p>
+                <p>Our team is dedicated to continuous improvement, and your feedback is the most valuable tool we have. Together, we can create a campus environment where everyone feels heard and supported.</p>
+            </div>
+            
+            <div class="info-box">
+                <h2>Our Commitment to You</h2>
+                <ul>
+                    <li>We'll acknowledge your concern within 24 hours</li>
+                    <li>We'll provide updates on our progress</li>
+                    <li>We'll work to resolve issues as quickly as possible</li>
+                    <li>We'll always treat you with respect and empathy</li>
+                </ul>
+            </div>
+            
+            <div class="info-box">
+                <p>"Your voice is powerful. Together, we can make our campus better for everyone."</p>
+            </div>
+        </section>
+        
+        <!-- Login Section -->
+        <section id="login">
+            <h1>Welcome Back! </h1>
+            <p>So good to see you again! Please log in to access your complaint history and share new concerns with us. We've missed you!</p>
+            
+            <div class="notification" id="login-notification"></div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="student-id"><i class="fas fa-id-card"></i> Your Student ID:</label>
+                    <input type="text" id="student-id" name="student-id" placeholder="Enter your student ID" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                
+                <button type="submit"><i class="fas fa-sign-in-alt"></i> Let Me In</button>
+            </form>
+            
+            <h2>New Here?</h2>
+            <p>Welcome to the family!  If you haven't created an account yet, please visit the IT department with your student ID card. Our friendly team will help you get set up in no time!</p>
+        </section>
+        
+        <!-- Contact Section -->
+        <section id="contact">
+            <h1>We'd Love to Hear From You! </h1>
+            <p>Got questions? Need help right away? We're here for you! Don't hesitate to reach out - we love chatting with our students and helping however we can.</p>
+            
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3 class="feature-title">Email Us</h3>
+                    <p>student.support@college.edu</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h3 class="feature-title">Call Us</h3>
+                    <p>(123) 456-7890</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Visit Us</h3>
+                    <p>Student Services Building, Room 102</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="feature-title">Office Hours</h3>
+                    <p>Monday-Friday, 9:00 AM - 5:00 PM</p>
+                </div>
+            </div>
+            
+            <h2>Send Us a Message</h2>
+            <div class="notification" id="contact-notification"></div>
+            
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="name"><i class="fas fa-user"></i> Your Name:</label>
+                    <input type="text" id="name" name="name" placeholder="What should we call you?" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Where can we reach you?" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject"><i class="fas fa-tag"></i> Subject:</label>
+                    <input type="text" id="subject" name="subject" placeholder="What's this about?" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message"><i class="fas fa-comment"></i> Your Message:</label>
+                    <textarea id="message" name="message" placeholder="Tell us what's on your mind..." required></textarea>
+                </div>
+                
+                <button type="submit"><i class="fas fa-paper-plane"></i> Send Message</button>
+            </form>
+        </section>
+        
+        <!-- Complaint Section -->
+        <section id="complain">
+            <h1>Share Your Concern With Us </h1>
+            <p>We're all ears!  Please tell us about your concern in as much detail as possible. Every single submission is important to us, and we promise to give it the attention it deserves.</p>
+            
+            <div class="notification" id="complaint-notification"></div>
+            
+            <form id="complaint-form">
+                <div class="form-group">
+                    <label for="complaint-type"><i class="fas fa-list"></i> What's This About?</label>
+                    <select id="complaint-type" name="complaint-type" required>
+                        <option value="">Choose a category</option>
+                        <option value="facilities">Facilities Issue</option>
+                        <option value="technical">Technical/Internet</option>
+                        <option value="academic">Academic/Exam</option>
+                        <option value="safety">Safety/Hygiene</option>
+                        <option value="behavioral">Behavioral Issue</option>
+                        <option value="other">Something Else</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location"><i class="fas fa-map-marker-alt"></i> Where Did This Happen?</label>
+                    <input type="text" id="location" name="location" placeholder="e.g., Library, Room 205, Hostel A">
+                </div>
+                
+                <div class="form-group">
+                    <label for="description"><i class="fas fa-comment-alt"></i> Tell Us More:</label>
+                    <textarea id="description" name="description" required placeholder="Please share all the details that might help us understand and address your concern..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="urgency"><i class="fas fa-exclamation-triangle"></i> How Urgent Is This?</label>
+                    <select id="urgency" name="urgency" required>
+                        <option value="">Select urgency</option>
+                        <option value="low">Not urgent - whenever you get to it</option>
+                        <option value="medium">Somewhat urgent - affects daily activities</option>
+                        <option value="high">Pretty urgent - needs attention soon</option>
+                        <option value="critical">Very urgent - safety or major disruption</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="anonymous" name="anonymous">
+                        <i class="fas fa-user-secret"></i> I'd prefer to submit this anonymously
+                    </label>
+                </div>
+                
+                <button type="submit"><i class="fas fa-paper-plane"></i> Share My Concern</button>
+            </form>
+        </section>
+    </div>
+    
+    <!-- Chat Assistant -->
+    <div class="chat-assistant">
+        <button class="chat-toggle" id="chat-toggle">
+            <i class="fas fa-comments"></i>
+        </button>
+        <div class="chat-window" id="chat-window">
+            <div class="chat-header">
+                <span>Campus Assistant</span>
+                <button class="chat-close" id="chat-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot">Hi there!  How can I help you today?</div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chat-input-field" placeholder="Type your message...">
+                <button id="chat-send">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle" id="dark-mode-toggle">
+        <i class="fas fa-moon"></i>
+    </div>
+    
+    <footer>
+        <p class="footer-message">We're here for you. Your concerns matter to us.</p>
+        <p>&copy; 2025 Student Complaint Portal. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    sections.forEach(s => s.classList.remove('active'));
+                    
+                    link.classList.add('active');
+                    
+                    const sectionId = link.getAttribute('data-section');
+                    document.getElementById(sectionId).classList.add('active');
+                });
+            });
+            
+            const loginForm = document.getElementById('login-form');
+            const loginNotification = document.getElementById('login-notification');
+            
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const studentId = document.getElementById('student-id').value;
+                const password = document.getElementById('password').value;
+                
+                if (studentId === 'student123' && password === 'password') {
+                    showNotification(loginNotification, "Great to see you again! Welcome back to your portal.", 'success');
+                } else {
+                    showNotification(loginNotification, "Hmm, that doesn't look right. Try student123/password", 'error');
+                }
+            });
+            
+            const contactForm = document.getElementById('contact-form');
+            const contactNotification = document.getElementById('contact-notification');
+            
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                showNotification(contactNotification, "Thanks for reaching out! We've received your message and will get back to you soon.", 'success');
+                contactForm.reset();
+            });
+            
+            const complaintForm = document.getElementById('complaint-form');
+            const complaintNotification = document.getElementById('complaint-notification');
+            
+            complaintForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                showNotification(complaintNotification, "Thank you for sharing your concern with us! We appreciate you taking the time to help improve our campus. We'll review this carefully and get back to you.", 'success');
+                complaintForm.reset();
+            });
+            
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            const body = document.body;
+            
+            darkModeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark-mode');
+                
+                const icon = darkModeToggle.querySelector('i');
+                if (body.classList.contains('dark-mode')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            });
+            
+            // Chat functionality
+            const chatToggle = document.getElementById('chat-toggle');
+            const chatWindow = document.getElementById('chat-window');
+            const chatClose = document.getElementById('chat-close');
+            const chatSend = document.getElementById('chat-send');
+            const chatInputField = document.getElementById('chat-input-field');
+            const chatMessages = document.getElementById('chat-messages');
+            
+            chatToggle.addEventListener('click', () => {
+                chatWindow.classList.toggle('active');
+            });
+            
+            chatClose.addEventListener('click', () => {
+                chatWindow.classList.remove('active');
+            });
+            
+            const sendChatMessage = () => {
+                const message = chatInputField.value.trim();
+                if (message) {
+                    // Add user message
+                    const userMessage = document.createElement('div');
+                    userMessage.className = 'message user';
+                    userMessage.textContent = message;
+                    chatMessages.appendChild(userMessage);
+                    
+                    // Clear input
+                    chatInputField.value = '';
+                    
+                    // Simulate bot response
+                    setTimeout(() => {
+                        const botMessage = document.createElement('div');
+                        botMessage.className = 'message bot';
+                        botMessage.textContent = "Thanks for your message! Our team will get back to you soon. In the meantime, feel free to file a formal complaint if needed.";
+                        chatMessages.appendChild(botMessage);
+                        
+                        // Scroll to bottom
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 1000);
+                    
+                    // Scroll to bottom
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            };
+            
+            chatSend.addEventListener('click', sendChatMessage);
+            
+            chatInputField.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendChatMessage();
+                }
+            });
+        });
+        
+        function showNotification(element, message, type) {
+            element.textContent = message;
+            element.className = 'notification ' + type;
+            element.style.display = 'block';
+            
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 6000);
+        }
+    </script>
+</body>
+</html>
